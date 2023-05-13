@@ -9,3 +9,4 @@
 1. gcc -D=test testXY.c "ime_programa".c
 2. ./a.out
 
+Windows OS navadnem terminalu nebo delalo, uporabi **Git Bash**
