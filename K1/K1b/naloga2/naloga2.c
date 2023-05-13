@@ -34,18 +34,21 @@ char **naSredino(char **nizi, int ciljnaDolzina)
 {
 
     // num of elements
-
     int num_elements = 0;
 
     for (int i = 0; nizi[i] != NULL; i++)
     {
         num_elements++;
     }
-    char **array = (char **)malloc(num_elements * sizeof(char *));
 
+    //kreiranje tabele kazalcev
+    char **array = (char **)malloc((num_elements + 1) * sizeof(char *));
+
+    //filanje tabele
     for (int i = 0; i < num_elements; i++)
-    {
-        array[i] = (char *)calloc(ciljnaDolzina+1, sizeof(char));
+    {   
+        //kreiranje tabele charov
+        array[i] = (char *)calloc(ciljnaDolzina + 1, sizeof(char));
 
         // dolocanje pik
         int index = 0;
@@ -54,6 +57,7 @@ char **naSredino(char **nizi, int ciljnaDolzina)
 
         int star_pike = pike / 2;
 
+        //vstavljanje sprednjih pik
         while (index < star_pike)
         {
             array[i][index] = '.';
@@ -62,13 +66,15 @@ char **naSredino(char **nizi, int ciljnaDolzina)
 
         int a = 0;
 
+        //prepisovanje besede
         while (index < (star_pike + size_char))
         {
             array[i][index] = nizi[i][a];
             index++;
             a++;
         }
-
+        
+        //vstavljanje koncnih pik
         while (index < ciljnaDolzina)
         {
             array[i][index] = '.';
@@ -85,29 +91,12 @@ char **naSredino(char **nizi, int ciljnaDolzina)
 
 #ifndef test
 
-char *NIZI[] = {
-    "Danes",
-    "je",
-    "kolokvij",
-    "pri_P2!",
-    NULL};
-
 int main()
 {
     // "Ce "zelite funkcijo naSredino testirati brez testnih primerov,
     // dopolnite to funkcijo in prevedite datoteko na obi"cajen na"cin
     // (gcc naloga2.c).
-    char **izhodni = naSredino(NIZI, 9);
 
-    int stNizov = sizeof(NIZI) / sizeof(NIZI[0]) - 1;
-    for (int i = 0; i < stNizov; i++)
-    {
-        printf("%d: \"%s\"\n", i, izhodni[i]);
-        free(izhodni[i]);
-    }
-    printf("%s\n", (izhodni[stNizov] == NULL) ? ("NULL") : ("NAPAKA"));
-
-    free(izhodni);
     return 0;
 }
 
