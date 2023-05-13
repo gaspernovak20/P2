@@ -5,7 +5,7 @@
 2.make
 3.make test
 
-###Izvedba specificnega testa
+### Izvedba specificnega testa
 1. gcc -D=test testXY.c "ime_programa".c
 2. ./a.out
 
