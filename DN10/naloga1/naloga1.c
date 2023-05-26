@@ -6,10 +6,20 @@
 
 #include "naloga1.h"
 
+void vstavi_v_tabelo(VO **student_ocena, int size, int index, VO *student)
+{
+    for (int i = size; i > index; i--)
+    {
+        student_ocena[i] = student_ocena[i - 1];
+    }
+
+    student_ocena[index] = student;
+}
+
 VO **opravili(Student **studentje, int stStudentov, char *predmet, int *stVO)
 {
 
-    VO **student_ocena = malloc(1001 * sizeof(*student_ocena));
+    VO **student_ocena = (VO**)calloc(1001 , sizeof(VO*));
     if (student_ocena == NULL)
         exit(1);
 
@@ -25,7 +35,7 @@ VO **opravili(Student **studentje, int stStudentov, char *predmet, int *stVO)
         {
 
             // previrjamo ali je pravilen predmet
-            if (strcmp(student->po[j].predmet, predmet) == 0)
+            if ((strcmp(student->po[j].predmet, predmet) == 0) && (student->po[j].ocena > 5))
             {
                 // dodamo VO v tabelo
                 VO *new_vo = malloc(sizeof *new_vo);
@@ -33,7 +43,40 @@ VO **opravili(Student **studentje, int stStudentov, char *predmet, int *stVO)
                 new_vo->vpisna = student->vpisna;
                 new_vo->ocena = student->po[j].ocena;
 
-                student_ocena[st_VO] = new_vo;
+                int index = 0;
+
+                if (st_VO == 0)
+                {
+                    student_ocena[0] = new_vo;
+                    student_ocena[1] = NULL;
+                }
+                else
+                {
+                    for (int i = 0; student_ocena[i] != NULL && (student_ocena[i]->ocena > new_vo->ocena && i < st_VO); i++)
+                    {
+                        index++;
+                    }
+
+                    if (student_ocena[index] != NULL)
+                    {
+                        if (student_ocena[index]->ocena < new_vo->ocena)
+                        {
+                            vstavi_v_tabelo(student_ocena, st_VO, index, new_vo);
+                        }
+                        else if (student_ocena[index]->ocena == new_vo->ocena)
+                        {
+                            for (int i = index; i < st_VO && student_ocena[i]->ocena == new_vo->ocena && student_ocena[i]->vpisna < new_vo->vpisna; i++)
+                            {
+                                index++;
+                            }
+                            vstavi_v_tabelo(student_ocena, st_VO, index, new_vo);
+                        }
+                    }
+                    else
+                    {
+                        vstavi_v_tabelo(student_ocena, st_VO, index, new_vo);
+                    }
+                }
                 // povecamo velikost "student_ocena" tabele
                 st_VO++;
             }
@@ -41,6 +84,8 @@ VO **opravili(Student **studentje, int stStudentov, char *predmet, int *stVO)
     }
 
     *stVO = st_VO;
+
+    // uredi_po_oceni_vpisni(student_ocena, st_VO);
 
     return student_ocena;
 }
@@ -92,6 +137,12 @@ int main()
     int stStudentov = sizeof(studentje) / sizeof(studentje[0]);
 
     izvedi(studentje, stStudentov, "FIZ");
+    izvedi(studentje, stStudentov, "P1");
+    izvedi(studentje, stStudentov, "P2");
+    izvedi(studentje, stStudentov, "ODV");
+    izvedi(studentje, stStudentov, "ARS");
+    izvedi(studentje, stStudentov, "OMA");
+    izvedi(studentje, stStudentov, "DS");
 
     return 0;
 }
