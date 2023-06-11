@@ -30,16 +30,54 @@
 
 //=============================================================================
 
-char** poStolpcih(char** nizi, int stVhodnih, int* stIzhodnih) {
-    // popravite / dopolnite ...
-    return NULL;
+int najdalsi_niz(char **nizi, int stVhodnih)
+{
+
+    int najvecji = strlen(nizi[0]);
+
+    for (int i = 1; i < stVhodnih; i++)
+    {
+        if (najvecji < strlen(nizi[i]))
+        {
+            najvecji = strlen(nizi[i]);
+        }
+    }
+
+    return najvecji;
+}
+
+char **poStolpcih(char **nizi, int stVhodnih, int *stIzhodnih)
+{
+
+    *stIzhodnih = najdalsi_niz(nizi, stVhodnih);
+
+    char **array = (char **)malloc(*stIzhodnih * sizeof(char *));
+
+    for (int x = 0; x < *stIzhodnih; x++)
+    {
+        char *nov_niz = (char *)calloc(stVhodnih, sizeof(char));
+        int index = 0;
+
+        for (int y = 0; y < stVhodnih; y++)
+        {
+            if (strlen(nizi[y]) > x)
+            {
+                nov_niz[index] = nizi[y][x];
+                index++;
+            }
+        }
+        array[x] = nov_niz;
+    }
+
+    return array;
 }
 
 //=============================================================================
 
 #ifndef test
 
-int main() {
+int main()
+{
     // "Ce "zelite funkcijo poStolpcih testirati brez testnih primerov,
     // dopolnite to funkcijo in prevedite datoteko na obi"cajen na"cin
     // (gcc naloga2.c).
